@@ -13,12 +13,13 @@ std::mutex mtx;             // mutex for critical section
 std::condition_variable cv; // condition variable for critical section  
 bool ready = false;         // used to let other threads know when it is ready
 
-
 /* Prints the thread id / max number of threads */
 void print_num(int num, int max) {
   std::unique_lock<std::mutex> lck(mtx);
   while(!ready){ cv.wait(lck); }
-  std::cout << num + 1 << " / " << max  << std::endl;
+  std::cout << "Thread: ";
+  std::cout << num + 1 << " / " << max;
+  std::cout << " currently has access" << std::endl;
 }
 
 /* Changes ready to true, and begins the threads printing */
@@ -37,7 +38,7 @@ int main (){
   for (int id = 0; id < threadnum; id++)
     threads[id] = std::thread(print_num, id, threadnum);
 
-  std::cout << "Running " << threadnum << " in parallel!" << std::endl;
+  std::cout << "\nRunning " << threadnum << " in parallel: \n" << std::endl;
 
   run(); // Run the semaphores
 
@@ -45,7 +46,7 @@ int main (){
   for(int id = 0; id < threadnum; id++)
     threads[id].join();
 
-  std::cout << "Completed semaphore example!" << std::endl;
+  std::cout << "\nCompleted semaphore example!\n" << std::endl;
 
   return 0;
 }
