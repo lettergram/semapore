@@ -11,7 +11,7 @@
  
 std::mutex mtx;             // mutex for critical section
 std::condition_variable cv; // condition variable for critical section  
-bool ready = false;
+bool ready = false;         // tell threads to run
 int current = 0;            // current count
 
 /* Prints the thread id / max number of threads */
@@ -23,6 +23,8 @@ void print_num(int num, int max) {
   std::cout << num + 1 << " / " << max;
   std::cout << " current count is: ";
   std::cout << current << std::endl;
+  
+  /* Notify threads to check for their turn */
   cv.notify_all();
 }
 
